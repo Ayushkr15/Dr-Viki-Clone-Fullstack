@@ -150,7 +150,6 @@ const Seeking = () => {
     }
   };
 
-  // FIX: Added the complete function body for handleNext
   const handleNext = () => {
     if (currentStep < 7) {
       setCurrentStep(currentStep + 1);
@@ -160,7 +159,6 @@ const Seeking = () => {
     }
   };
 
-  // FIX: Added the complete function body for handlePrevious
   const handlePrevious = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);

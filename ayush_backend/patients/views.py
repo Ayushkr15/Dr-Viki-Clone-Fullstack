@@ -84,11 +84,13 @@ class PractitionerRegistrationAPIView(generics.CreateAPIView):
         user_serializer.is_valid(raise_exception=True)
         user = user_serializer.save()
 
-        # We pass the user object directly to the save method, not in the data dict
+        # FIX: Populate the first_name and last_name on the User model
+        user.first_name = request.data.get('first_name', '')
+        user.last_name = request.data.get('last_name', '')
+        user.save()
+
         profile_serializer = PractitionerProfileSerializer(data=request.data)
         profile_serializer.is_valid(raise_exception=True)
-
-        # FIX: Pass the user object directly into the .save() method here
         profile_serializer.save(user=user)
 
         return Response({
@@ -98,21 +100,37 @@ class PractitionerRegistrationAPIView(generics.CreateAPIView):
 
 
 class PatientRegistrationAPIView(generics.CreateAPIView):
+    """
+    API view to handle the registration of a new Patient.
+    Creates a User and a linked PatientProfile.
+    """
     serializer_class = UserSerializer
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):
+        # Step 1: Create the main User account (handles username, email, password)
         user_serializer = self.get_serializer(data=request.data)
         user_serializer.is_valid(raise_exception=True)
         user = user_serializer.save()
 
+        # Step 2: Populate the User's first_name and last_name from the full_name field
+        # This ensures the names show up correctly in the Django admin user list.
+        full_name = request.data.get('full_name', '').strip()
+        name_parts = full_name.split(' ', 1)
+        user.first_name = name_parts[0]
+        if len(name_parts) > 1:
+            user.last_name = name_parts[1]
+        user.save()
+
+        # Step 3: Create the Patient Profile and link it to the new User
         profile_serializer = PatientProfileSerializer(data=request.data)
         profile_serializer.is_valid(raise_exception=True)
-
-        # FIX: Pass the user object directly into the .save() method here
+        # We pass the 'user' object directly to the save() method
         profile_serializer.save(user=user)
 
+        # Step 4: Return a successful response to the frontend
         return Response({
+            "message": "Patient registration successful.",
             "user": user_serializer.data,
             "profile": profile_serializer.data
         }, status=status.HTTP_201_CREATED)
