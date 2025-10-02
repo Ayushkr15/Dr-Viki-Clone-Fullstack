@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-// --- Icon Components ---
+// --- Icon Components (can be moved to their own files later) ---
 
 const ArrowLeftIcon = () => (
   <svg
@@ -37,72 +37,6 @@ const ChevronDownIcon = () => (
   </svg>
 );
 
-// --- Helper Components (to replicate shadcn/ui look and feel in a single file) ---
-
-const Card = ({ children, className = "" }) => (
-  <div
-    className={`text-card-foreground flex flex-col gap-6 rounded-xl border py-6 backdrop-blur-sm bg-white/90 shadow-xl ${className}`}
-  >
-    {children}
-  </div>
-);
-
-const CardHeader = ({ children }) => (
-  <div className="grid auto-rows-min items-start gap-1.5 px-6">{children}</div>
-);
-const CardTitle = ({ children }) => (
-  <div className="font-semibold text-2xl text-green-700">{children}</div>
-);
-const CardDescription = ({ children }) => (
-  <div className="text-muted-foreground text-sm">{children}</div>
-);
-const CardContent = ({ children }) => (
-  <div className="px-6 space-y-6">{children}</div>
-);
-const CardFooter = ({ children }) => (
-  <div className="px-6 pt-6">{children}</div>
-);
-
-const Label = ({ htmlFor, children }) => (
-  <label
-    htmlFor={htmlFor}
-    className="flex items-center gap-2 text-sm leading-none font-medium"
-  >
-    {children}
-  </label>
-);
-
-const Input = ({
-  id,
-  type = "text",
-  placeholder,
-  value,
-  onChange,
-  disabled,
-  maxLength,
-}) => (
-  <input
-    id={id}
-    type={type}
-    placeholder={placeholder}
-    value={value}
-    onChange={onChange}
-    disabled={disabled}
-    maxLength={maxLength}
-    className="border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-colors outline-none file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 mt-1"
-  />
-);
-
-const Button = ({ children, onClick, disabled, className = "" }) => (
-  <button
-    onClick={onClick}
-    disabled={disabled}
-    className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 text-white shadow-xs h-9 px-4 py-2 bg-green-600 hover:bg-green-700 ${className}`}
-  >
-    {children}
-  </button>
-);
-
 const UploadIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -116,15 +50,96 @@ const UploadIcon = () => (
     strokeLinejoin="round"
     className="lucide lucide-upload mx-auto h-8 w-8 text-gray-400 mb-2"
   >
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-    <polyline points="17 8 12 3 7 8"></polyline>
-    <line x1="12" x2="12" y1="3" y2="15"></line>
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+    <polyline points="17 8 12 3 7 8" />
+    <line x1="12" x2="12" y1="3" y2="15" />
   </svg>
 );
+
+// --- Helper UI Components (can be moved to their own files later) ---
+
+const Card = ({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => (
+  <div
+    className={`text-card-foreground flex flex-col gap-6 rounded-xl border py-6 backdrop-blur-sm bg-white/90 shadow-xl ${className}`}
+  >
+    {children}
+  </div>
+);
+const CardHeader = ({ children }: { children: React.ReactNode }) => (
+  <div className="grid auto-rows-min items-start gap-1.5 px-6">{children}</div>
+);
+const CardTitle = ({ children }: { children: React.ReactNode }) => (
+  <div className="font-semibold text-2xl text-green-700">{children}</div>
+);
+const CardDescription = ({ children }: { children: React.ReactNode }) => (
+  <div className="text-muted-foreground text-sm">{children}</div>
+);
+const CardContent = ({ children }: { children: React.ReactNode }) => (
+  <div className="px-6 space-y-6">{children}</div>
+);
+const CardFooter = ({ children }: { children: React.ReactNode }) => (
+  <div className="px-6 pt-6">{children}</div>
+);
+const Label = ({
+  htmlFor,
+  children,
+}: {
+  htmlFor: string;
+  children: React.ReactNode;
+}) => (
+  <label
+    htmlFor={htmlFor}
+    className="flex items-center gap-2 text-sm leading-none font-medium"
+  >
+    {children}
+  </label>
+);
+const Input = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
+  <input
+    {...props}
+    className="border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-colors outline-none file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 mt-1"
+  />
+);
+const Button = ({
+  children,
+  onClick,
+  disabled,
+  className = "",
+  variant,
+}: {
+  children: React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+  className?: string;
+  variant?: string;
+}) => {
+  const baseClasses =
+    "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 shadow-xs h-9 px-4 py-2";
+  const variantClasses =
+    variant === "link"
+      ? "bg-transparent text-blue-600 hover:underline shadow-none p-0"
+      : "text-white bg-green-600 hover:bg-green-700";
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`${baseClasses} ${variantClasses} ${className}`}
+    >
+      {children}
+    </button>
+  );
+};
 
 // --- Main Practitioner Registration Component ---
 
 const PractitionerRegistration = () => {
+  // All state and logic has been moved INSIDE the component to fix bugs.
   const [mobileNumber, setMobileNumber] = useState("");
   const [mobileOtp, setMobileOtp] = useState("");
   const [isMobileOtpSent, setIsMobileOtpSent] = useState(false);
@@ -143,8 +158,8 @@ const PractitionerRegistration = () => {
     specialisation: "",
     registrationNo: "",
     dob: "",
-    degreeCertificate: [],
-    professionalPhoto: null,
+    degreeCertificate: [] as File[],
+    professionalPhoto: null as File | null,
     currentAddress: "",
     state: "",
     pinCode: "",
@@ -152,65 +167,125 @@ const PractitionerRegistration = () => {
     sameAsCurrent: false,
   });
 
-  const handleInputChange = e => {
-    const { id, value, type, checked } = e.target;
-    if (type === "checkbox") {
-      setFormData(prev => ({ ...prev, [id]: checked }));
-      if (checked) {
-        setFormData(prev => ({
-          ...prev,
-          permanentAddress: formData.currentAddress,
-        }));
+  const handleSendOtp = async (contact: string, type: "sms" | "email") => {
+    // Clear previous errors
+    if (type === "sms") setMobileError("");
+    if (type === "email") setEmailError("");
+
+    // Basic validation before sending
+    if (
+      type === "sms" &&
+      (mobileNumber.length !== 10 || !/^\d+$/.test(mobileNumber))
+    ) {
+      setMobileError("Please enter a valid 10-digit mobile number.");
+      return;
+    }
+    if (
+      type === "email" &&
+      (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    ) {
+      setEmailError("Please enter a valid email address.");
+      return;
+    }
+
+    try {
+      const apiContact = type === "sms" ? `+91${contact}` : contact;
+
+      const response = await fetch("http://127.0.0.1:8000/api/otp/generate/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contact: apiContact, type }), // Send the formatted number
+      });
+      if (response.ok) {
+        alert(`OTP sent to ${contact}!`);
+        if (type === "sms") setIsMobileOtpSent(true);
+        if (type === "email") setIsEmailOtpSent(true);
       } else {
-        setFormData(prev => ({ ...prev, permanentAddress: "" }));
+        const err = await response.json();
+        const errorMsg = err.error || "Failed to send OTP.";
+        if (type === "sms") setMobileError(errorMsg);
+        if (type === "email") setEmailError(errorMsg);
       }
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+      alert("An error occurred.");
+    }
+  };
+
+  const handleVerifyOtp = async (
+    contact: string,
+    otp: string,
+    type: "sms" | "email"
+  ) => {
+    if (type === "sms") setMobileError("");
+    if (type === "email") setEmailError("");
+
+    try {
+          const apiContact = type === "sms" ? `+91${contact}` : contact;
+
+          const response = await fetch(
+            "http://127.0.0.1:8000/api/otp/verify/",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ contact: apiContact, otp }), // Send the formatted number
+            }
+          );
+      if (response.ok) {
+        alert("Verification successful!");
+        if (type === "sms") setIsMobileVerified(true);
+        if (type === "email") setIsEmailVerified(true);
+      } else {
+        const err = await response.json();
+        const errorMsg = err.error || "Invalid OTP.";
+        if (type === "sms") setMobileError(errorMsg);
+        if (type === "email") setEmailError(errorMsg);
+      }
+    } catch (error) {
+      console.error("Error verifying OTP:", error);
+      alert("An error occurred.");
+    }
+  };
+
+  const handleMobileNumberChange = () => {
+    setIsMobileOtpSent(false);
+    setMobileOtp("");
+    setMobileError("");
+  };
+
+  const handleEmailChange = () => {
+    setIsEmailOtpSent(false);
+    setEmailOtp("");
+    setEmailError("");
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { id, value, type } = e.target;
+    const isCheckbox = type === "checkbox";
+    // Asserting the target as HTMLInputElement to access 'checked'
+    const checked = isCheckbox ? (e.target as HTMLInputElement).checked : false;
+
+    if (id === "sameAsCurrent") {
+      setFormData(prev => ({
+        ...prev,
+        sameAsCurrent: checked,
+        permanentAddress: checked ? prev.currentAddress : "",
+      }));
     } else {
       setFormData(prev => ({ ...prev, [id]: value }));
     }
   };
 
-  const handleFileChange = e => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, files } = e.target;
+    if (!files) return;
+
     if (id === "degreeCertificate") {
       setFormData(prev => ({ ...prev, [id]: Array.from(files) }));
     } else {
       setFormData(prev => ({ ...prev, [id]: files[0] || null }));
-    }
-  };
-
-  const handleSendMobileOtp = () => {
-    setMobileError("");
-    if (mobileNumber.length === 10 && /^\d+$/.test(mobileNumber)) {
-      setIsMobileOtpSent(true);
-    } else {
-      setMobileError("Please enter a valid 10-digit mobile number.");
-    }
-  };
-
-  const handleVerifyMobileOtp = () => {
-    setMobileError("");
-    if (mobileOtp.length > 3) {
-      setIsMobileVerified(true);
-    } else {
-      setMobileError("Please enter a valid OTP.");
-    }
-  };
-
-  const handleSendEmailOtp = () => {
-    setEmailError("");
-    if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setIsEmailOtpSent(true);
-    } else {
-      setEmailError("Please enter a valid email address.");
-    }
-  };
-
-  const handleVerifyEmailOtp = () => {
-    setEmailError("");
-    if (emailOtp.length > 3) {
-      setIsEmailVerified(true);
-    } else {
-      setEmailError("Please enter a valid OTP.");
     }
   };
 
@@ -221,8 +296,7 @@ const PractitionerRegistration = () => {
           href="/"
           className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
         >
-          <ArrowLeftIcon />
-          Back to Home
+          <ArrowLeftIcon /> Back to Home
         </a>
       </div>
       <div className="w-full max-w-4xl">
@@ -236,141 +310,169 @@ const PractitionerRegistration = () => {
           <CardContent>
             {/* --- Mobile Verification --- */}
             <div
-              className={`space-y-2 p-4 border rounded-lg transition-all duration-300 ${
+              className={`space-y-3 p-4 border rounded-lg transition-all duration-300 ${
                 isMobileVerified
-                  ? "border-green-300 bg-green-50/30"
-                  : "border-green-200 bg-green-50/50"
+                  ? "border-green-300 bg-green-50"
+                  : "border-gray-200"
               }`}
             >
-              <h3 className="font-semibold text-green-800 flex items-center gap-2">
+              <h3 className="font-semibold text-gray-800">
                 1. Mobile Number Verification
               </h3>
-              <div className="flex flex-col md:flex-row gap-2 items-start">
-                <div className="flex-1 w-full">
-                  <Label htmlFor="mobile">Mobile Number</Label>
-                  <Input
-                    id="mobile"
-                    placeholder="Enter 10-digit mobile number"
-                    type="tel"
-                    value={mobileNumber}
-                    onChange={e => {
-                      setMobileNumber(e.target.value);
-                      setMobileError("");
-                    }}
-                    disabled={isMobileVerified}
-                  />
+              {isMobileVerified ? (
+                <div className="flex items-center justify-between">
+                  <p className="text-gray-700">{mobileNumber}</p>
+                  <p className="text-sm text-green-600 font-medium">
+                    ✓ Verified
+                  </p>
                 </div>
-                {!isMobileOtpSent ? (
-                  <Button
-                    onClick={handleSendMobileOtp}
-                    disabled={isMobileVerified}
-                    className="mt-6"
-                  >
-                    Send OTP
-                  </Button>
-                ) : (
-                  <>
+              ) : (
+                <>
+                  <div className="flex flex-col md:flex-row gap-2 items-end">
                     <div className="flex-1 w-full">
-                      <Label htmlFor="mobileOtp">Enter OTP</Label>
+                      <Label htmlFor="mobile">Mobile Number</Label>
                       <Input
-                        id="mobileOtp"
-                        placeholder="Enter OTP"
-                        value={mobileOtp}
+                        id="mobile"
+                        placeholder="Enter 10-digit mobile number"
+                        type="tel"
+                        value={mobileNumber}
                         onChange={e => {
-                          setMobileOtp(e.target.value);
+                          setMobileNumber(e.target.value);
                           setMobileError("");
                         }}
-                        disabled={isMobileVerified}
+                        disabled={isMobileOtpSent}
                       />
                     </div>
-                    <Button
-                      onClick={handleVerifyMobileOtp}
-                      disabled={isMobileVerified}
-                      className="mt-6"
-                    >
-                      Verify OTP
-                    </Button>
-                  </>
-                )}
-              </div>
-              {mobileError && (
-                <p className="text-sm text-red-600 mt-1">{mobileError}</p>
-              )}
-              {isMobileVerified && (
-                <p className="text-sm text-green-600 font-medium mt-2">
-                  ✓ Mobile Number Verified
-                </p>
+                    {!isMobileOtpSent ? (
+                      <Button
+                        onClick={() => handleSendOtp(mobileNumber, "sms")}
+                        className="w-full md:w-auto"
+                      >
+                        Send OTP
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="link"
+                        onClick={handleMobileNumberChange}
+                        className="w-full md:w-auto justify-start md:justify-center"
+                      >
+                        Change
+                      </Button>
+                    )}
+                  </div>
+                  {isMobileOtpSent && (
+                    <div className="flex flex-col md:flex-row gap-2 items-end animate-in fade-in duration-500">
+                      <div className="flex-1 w-full">
+                        <Label htmlFor="mobileOtp">Enter OTP</Label>
+                        <Input
+                          id="mobileOtp"
+                          placeholder="Enter 6-digit OTP"
+                          value={mobileOtp}
+                          onChange={e => {
+                            setMobileOtp(e.target.value);
+                            setMobileError("");
+                          }}
+                        />
+                      </div>
+                      <Button
+                        onClick={() =>
+                          handleVerifyOtp(mobileNumber, mobileOtp, "sms")
+                        }
+                        className="w-full md:w-auto"
+                      >
+                        Verify OTP
+                      </Button>
+                    </div>
+                  )}
+                  {mobileError && (
+                    <p className="text-sm text-red-600 mt-1">{mobileError}</p>
+                  )}
+                </>
               )}
             </div>
 
             {/* --- Email Verification --- */}
             <div
-              className={`space-y-2 p-4 border rounded-lg transition-all duration-300 ${
+              className={`space-y-3 p-4 border rounded-lg transition-all duration-300 ${
                 !isMobileVerified ? "opacity-50 pointer-events-none" : ""
               } ${
                 isEmailVerified
-                  ? "border-green-300 bg-green-50/30"
-                  : "border-green-200 bg-green-50/50"
+                  ? "border-green-300 bg-green-50"
+                  : "border-gray-200"
               }`}
             >
-              <h3 className="font-semibold text-green-800 flex items-center gap-2">
+              <h3 className="font-semibold text-gray-800">
                 2. Email Address Verification
               </h3>
-              <div className="flex flex-col md:flex-row gap-2 items-start">
-                <div className="flex-1 w-full">
-                  <Label htmlFor="email">Email Address</Label>
-                  <Input
-                    id="email"
-                    placeholder="Enter your email address"
-                    type="email"
-                    value={email}
-                    onChange={e => {
-                      setEmail(e.target.value);
-                      setEmailError("");
-                    }}
-                    disabled={!isMobileVerified || isEmailVerified}
-                  />
+              {isEmailVerified ? (
+                <div className="flex items-center justify-between">
+                  <p className="text-gray-700">{email}</p>
+                  <p className="text-sm text-green-600 font-medium">
+                    ✓ Verified
+                  </p>
                 </div>
-                {!isEmailOtpSent ? (
-                  <Button
-                    onClick={handleSendEmailOtp}
-                    disabled={isEmailVerified}
-                    className="mt-6"
-                  >
-                    Send OTP
-                  </Button>
-                ) : (
-                  <>
+              ) : (
+                <>
+                  <div className="flex flex-col md:flex-row gap-2 items-end">
                     <div className="flex-1 w-full">
-                      <Label htmlFor="emailOtp">Enter OTP</Label>
+                      <Label htmlFor="email">Email Address</Label>
                       <Input
-                        id="emailOtp"
-                        placeholder="Enter OTP"
-                        value={emailOtp}
+                        id="email"
+                        placeholder="Enter your email address"
+                        type="email"
+                        value={email}
                         onChange={e => {
-                          setEmailOtp(e.target.value);
+                          setEmail(e.target.value);
                           setEmailError("");
                         }}
-                        disabled={isEmailVerified}
+                        disabled={isEmailOtpSent}
                       />
                     </div>
-                    <Button
-                      onClick={handleVerifyEmailOtp}
-                      disabled={isEmailVerified}
-                      className="mt-6"
-                    >
-                      Verify OTP
-                    </Button>
-                  </>
-                )}
-              </div>
-              {emailError && (
-                <p className="text-sm text-red-600 mt-1">{emailError}</p>
-              )}
-              {isEmailVerified && (
-                <p className="text-sm text-green-600 font-medium mt-2">
-                  ✓ Email Verified
-                </p>
+                    {!isEmailOtpSent ? (
+                      <Button
+                        onClick={() => handleSendOtp(email, "email")}
+                        className="w-full md:w-auto"
+                      >
+                        Send OTP
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="link"
+                        onClick={handleEmailChange}
+                        className="w-full md:w-auto justify-start md:justify-center"
+                      >
+                        Change
+                      </Button>
+                    )}
+                  </div>
+                  {isEmailOtpSent && (
+                    <div className="flex flex-col md:flex-row gap-2 items-end animate-in fade-in duration-500">
+                      <div className="flex-1 w-full">
+                        <Label htmlFor="emailOtp">Enter OTP</Label>
+                        <Input
+                          id="emailOtp"
+                          placeholder="Enter 6-digit OTP"
+                          value={emailOtp}
+                          onChange={e => {
+                            setEmailOtp(e.target.value);
+                            setEmailError("");
+                          }}
+                        />
+                      </div>
+                      <Button
+                        onClick={() =>
+                          handleVerifyOtp(email, emailOtp, "email")
+                        }
+                        className="w-full md:w-auto"
+                      >
+                        Verify OTP
+                      </Button>
+                    </div>
+                  )}
+                  {emailError && (
+                    <p className="text-sm text-red-600 mt-1">{emailError}</p>
+                  )}
+                </>
               )}
             </div>
 
@@ -378,9 +480,9 @@ const PractitionerRegistration = () => {
             <div
               className={`space-y-6 p-4 border rounded-lg transition-all duration-300 ${
                 !isEmailVerified ? "opacity-50 pointer-events-none" : ""
-              } border-gray-200 bg-gray-50/50`}
+              }`}
             >
-              <h3 className="font-semibold text-green-800 flex items-center gap-2">
+              <h3 className="font-semibold text-gray-800">
                 3. Personal &amp; Professional Information
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -390,7 +492,6 @@ const PractitionerRegistration = () => {
                     id="firstName"
                     value={formData.firstName}
                     onChange={handleInputChange}
-                    disabled={!isEmailVerified}
                   />
                 </div>
                 <div>
@@ -399,7 +500,6 @@ const PractitionerRegistration = () => {
                     id="lastName"
                     value={formData.lastName}
                     onChange={handleInputChange}
-                    disabled={!isEmailVerified}
                   />
                 </div>
               </div>
@@ -407,8 +507,9 @@ const PractitionerRegistration = () => {
                 <Label htmlFor="specialisation">Specialisation</Label>
                 <select
                   id="specialisation"
+                  value={formData.specialisation}
+                  onChange={handleInputChange}
                   className="appearance-none border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent pl-3 pr-8 py-1 text-base shadow-xs mt-1"
-                  disabled={!isEmailVerified}
                 >
                   <option>Select your specialisation</option>
                   <option>Ayurveda</option>
@@ -428,8 +529,7 @@ const PractitionerRegistration = () => {
                   placeholder="Enter registration number (max 15 characters)"
                   value={formData.registrationNo}
                   onChange={handleInputChange}
-                  disabled={!isEmailVerified}
-                  maxLength="15"
+                  maxLength={15}
                 />
                 <p className="text-sm text-gray-500 mt-1">
                   Maximum 15 characters
@@ -442,7 +542,6 @@ const PractitionerRegistration = () => {
                   type="date"
                   value={formData.dob}
                   onChange={handleInputChange}
-                  disabled={!isEmailVerified}
                 />
               </div>
               <div className="space-y-4">
@@ -460,7 +559,6 @@ const PractitionerRegistration = () => {
                       type="file"
                       accept=".pdf"
                       multiple
-                      disabled={!isEmailVerified}
                       className="mt-2"
                       onChange={handleFileChange}
                     />
@@ -492,7 +590,6 @@ const PractitionerRegistration = () => {
                       id="professionalPhoto"
                       type="file"
                       accept="image/*"
-                      disabled={!isEmailVerified}
                       className="mt-2"
                       onChange={handleFileChange}
                     />
@@ -514,7 +611,6 @@ const PractitionerRegistration = () => {
                     placeholder="Enter your current address"
                     value={formData.currentAddress}
                     onChange={handleInputChange}
-                    disabled={!isEmailVerified}
                   />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -522,8 +618,9 @@ const PractitionerRegistration = () => {
                     <Label htmlFor="state">Select State</Label>
                     <select
                       id="state"
+                      value={formData.state}
+                      onChange={handleInputChange}
                       className="appearance-none border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent pl-3 pr-8 py-1 text-base shadow-xs mt-1"
-                      disabled={!isEmailVerified}
                     >
                       <option>Select your state</option>
                       <option>Andhra Pradesh</option>
@@ -542,10 +639,9 @@ const PractitionerRegistration = () => {
                       id="pinCode"
                       placeholder="Enter 6-digit PIN code"
                       type="tel"
-                      maxLength="6"
+                      maxLength={6}
                       value={formData.pinCode}
                       onChange={handleInputChange}
-                      disabled={!isEmailVerified}
                     />
                   </div>
                 </div>
@@ -557,7 +653,6 @@ const PractitionerRegistration = () => {
                       className="size-4 rounded-[4px] border"
                       checked={formData.sameAsCurrent}
                       onChange={handleInputChange}
-                      disabled={!isEmailVerified}
                     />
                     <Label htmlFor="sameAsCurrent">
                       Same as current address
@@ -569,7 +664,7 @@ const PractitionerRegistration = () => {
                     placeholder="Enter your permanent address"
                     value={formData.permanentAddress}
                     onChange={handleInputChange}
-                    disabled={!isEmailVerified || formData.sameAsCurrent}
+                    disabled={formData.sameAsCurrent}
                   />
                 </div>
               </div>

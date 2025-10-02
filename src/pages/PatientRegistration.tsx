@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Save } from "lucide-react";
 
+
 const totalSteps = 7;
 const stepTitles = [
   "Personal Information",
