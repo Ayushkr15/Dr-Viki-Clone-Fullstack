@@ -1,145 +1,29 @@
 import React, { useState } from "react";
-
-// --- Icon Components (can be moved to their own files later) ---
-
-const ArrowLeftIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="h-4 w-4"
-  >
-    <path d="m12 19-7-7 7-7" />
-    <path d="M19 12H5" />
-  </svg>
-);
-
-const ChevronDownIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="lucide lucide-chevron-down h-4 w-4 opacity-50"
-  >
-    <path d="m6 9 6 6 6-6" />
-  </svg>
-);
-
-const UploadIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="lucide lucide-upload mx-auto h-8 w-8 text-gray-400 mb-2"
-  >
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-    <polyline points="17 8 12 3 7 8" />
-    <line x1="12" x2="12" y1="3" y2="15" />
-  </svg>
-);
-
-// --- Helper UI Components (can be moved to their own files later) ---
-
-const Card = ({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) => (
-  <div
-    className={`text-card-foreground flex flex-col gap-6 rounded-xl border py-6 backdrop-blur-sm bg-white/90 shadow-xl ${className}`}
-  >
-    {children}
-  </div>
-);
-const CardHeader = ({ children }: { children: React.ReactNode }) => (
-  <div className="grid auto-rows-min items-start gap-1.5 px-6">{children}</div>
-);
-const CardTitle = ({ children }: { children: React.ReactNode }) => (
-  <div className="font-semibold text-2xl text-green-700">{children}</div>
-);
-const CardDescription = ({ children }: { children: React.ReactNode }) => (
-  <div className="text-muted-foreground text-sm">{children}</div>
-);
-const CardContent = ({ children }: { children: React.ReactNode }) => (
-  <div className="px-6 space-y-6">{children}</div>
-);
-const CardFooter = ({ children }: { children: React.ReactNode }) => (
-  <div className="px-6 pt-6">{children}</div>
-);
-const Label = ({
-  htmlFor,
-  children,
-}: {
-  htmlFor: string;
-  children: React.ReactNode;
-}) => (
-  <label
-    htmlFor={htmlFor}
-    className="flex items-center gap-2 text-sm leading-none font-medium"
-  >
-    {children}
-  </label>
-);
-const Input = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
-  <input
-    {...props}
-    className="border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-colors outline-none file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 mt-1"
-  />
-);
-const Button = ({
-  children,
-  onClick,
-  disabled,
-  className = "",
-  variant,
-}: {
-  children: React.ReactNode;
-  onClick?: () => void;
-  disabled?: boolean;
-  className?: string;
-  variant?: string;
-}) => {
-  const baseClasses =
-    "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 shadow-xs h-9 px-4 py-2";
-  const variantClasses =
-    variant === "link"
-      ? "bg-transparent text-blue-600 hover:underline shadow-none p-0"
-      : "text-white bg-green-600 hover:bg-green-700";
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={`${baseClasses} ${variantClasses} ${className}`}
-    >
-      {children}
-    </button>
-  );
-};
-
-// --- Main Practitioner Registration Component ---
+import { ArrowLeft, ChevronDown, Upload } from "lucide-react"; // Correct icons are imported here
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const PractitionerRegistration = () => {
-  // All state and logic has been moved INSIDE the component to fix bugs.
+  // All state and handlers are correctly placed INSIDE the component.
+
+  // --- State for OTP Flow ---
   const [mobileNumber, setMobileNumber] = useState("");
   const [mobileOtp, setMobileOtp] = useState("");
   const [isMobileOtpSent, setIsMobileOtpSent] = useState(false);
@@ -152,6 +36,9 @@ const PractitionerRegistration = () => {
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [emailError, setEmailError] = useState("");
 
+  const [password, setPassword] = useState("");
+
+  // --- State for the rest of the form ---
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -167,22 +54,19 @@ const PractitionerRegistration = () => {
     sameAsCurrent: false,
   });
 
+  // --- Handler Functions ---
+
   const handleSendOtp = async (contact: string, type: "sms" | "email") => {
-    // Clear previous errors
     if (type === "sms") setMobileError("");
     if (type === "email") setEmailError("");
 
-    // Basic validation before sending
-    if (
-      type === "sms" &&
-      (mobileNumber.length !== 10 || !/^\d+$/.test(mobileNumber))
-    ) {
+    if (type === "sms" && (contact.length !== 10 || !/^\d+$/.test(contact))) {
       setMobileError("Please enter a valid 10-digit mobile number.");
       return;
     }
     if (
       type === "email" &&
-      (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      (!contact || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact))
     ) {
       setEmailError("Please enter a valid email address.");
       return;
@@ -190,11 +74,10 @@ const PractitionerRegistration = () => {
 
     try {
       const apiContact = type === "sms" ? `+91${contact}` : contact;
-
       const response = await fetch("http://127.0.0.1:8000/api/otp/generate/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contact: apiContact, type }), // Send the formatted number
+        body: JSON.stringify({ contact: apiContact, type }),
       });
       if (response.ok) {
         alert(`OTP sent to ${contact}!`);
@@ -221,16 +104,12 @@ const PractitionerRegistration = () => {
     if (type === "email") setEmailError("");
 
     try {
-          const apiContact = type === "sms" ? `+91${contact}` : contact;
-
-          const response = await fetch(
-            "http://127.0.0.1:8000/api/otp/verify/",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ contact: apiContact, otp }), // Send the formatted number
-            }
-          );
+      const apiContact = type === "sms" ? `+91${contact}` : contact;
+      const response = await fetch("http://127.0.0.1:8000/api/otp/verify/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contact: apiContact, otp }),
+      });
       if (response.ok) {
         alert("Verification successful!");
         if (type === "sms") setIsMobileVerified(true);
@@ -247,6 +126,65 @@ const PractitionerRegistration = () => {
     }
   };
 
+  const handleCompleteRegistration = async () => {
+    if (!isMobileVerified || !isEmailVerified) {
+      alert("Please verify both your mobile and email before proceeding.");
+      return;
+    }
+    if (password.length < 8) {
+      alert("Password must be at least 8 characters long.");
+      return;
+    }
+
+    const registrationData = new FormData();
+
+    // User Account Data
+    registrationData.append("username", email);
+    registrationData.append("email", email);
+    registrationData.append("password", password);
+
+    // Profile Data
+    registrationData.append("first_name", formData.firstName);
+    registrationData.append("last_name", formData.lastName);
+    registrationData.append("mobile_number", mobileNumber);
+    registrationData.append("specialisation", formData.specialisation);
+    registrationData.append("registration_number", formData.registrationNo);
+    registrationData.append("date_of_birth", formData.dob);
+    registrationData.append("current_address", formData.currentAddress);
+    registrationData.append("state", formData.state);
+    registrationData.append("pin_code", formData.pinCode);
+    registrationData.append("permanent_address", formData.permanentAddress);
+
+    // File Data
+    if (formData.professionalPhoto) {
+      registrationData.append("professional_photo", formData.professionalPhoto);
+    }
+    formData.degreeCertificate.forEach(file => {
+      registrationData.append("degree_certificate", file);
+    });
+
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:8000/api/register/practitioner/",
+        {
+          method: "POST",
+          body: registrationData,
+        }
+      );
+
+      if (response.ok) {
+        alert("Registration Successful! Your account has been created.");
+      } else {
+        const errorData = await response.json();
+        console.error("Registration failed:", errorData);
+        alert("Registration failed. Please check the console for details.");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+      alert("An error occurred during registration.");
+    }
+  };
+
   const handleMobileNumberChange = () => {
     setIsMobileOtpSent(false);
     setMobileOtp("");
@@ -259,23 +197,21 @@ const PractitionerRegistration = () => {
     setEmailError("");
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { id, value, type } = e.target;
-    const isCheckbox = type === "checkbox";
-    // Asserting the target as HTMLInputElement to access 'checked'
-    const checked = isCheckbox ? (e.target as HTMLInputElement).checked : false;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
 
-    if (id === "sameAsCurrent") {
-      setFormData(prev => ({
-        ...prev,
-        sameAsCurrent: checked,
-        permanentAddress: checked ? prev.currentAddress : "",
-      }));
-    } else {
-      setFormData(prev => ({ ...prev, [id]: value }));
-    }
+  const handleCheckedChange = (checked: boolean) => {
+    setFormData(prev => ({
+      ...prev,
+      sameAsCurrent: checked,
+      permanentAddress: checked ? prev.currentAddress : "",
+    }));
+  };
+
+  const handleSelectChange = (id: string, value: string) => {
+    setFormData(prev => ({ ...prev, [id]: value }));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -292,11 +228,12 @@ const PractitionerRegistration = () => {
   return (
     <div className="bg-gray-100 p-4 md:p-8 flex flex-col items-center justify-center min-h-screen">
       <div className="w-full max-w-4xl mb-4">
+        {/* FIX: Changed ArrowLeftIcon to ArrowLeft */}
         <a
           href="/"
           className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
         >
-          <ArrowLeftIcon /> Back to Home
+          <ArrowLeft className="h-4 w-4" /> Back to Home
         </a>
       </div>
       <div className="w-full max-w-4xl">
@@ -503,24 +440,37 @@ const PractitionerRegistration = () => {
                   />
                 </div>
               </div>
-              <div className="relative">
+              <div>
+                <Label htmlFor="password">Create Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Minimum 8 characters"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                />
+              </div>
+              <div>
                 <Label htmlFor="specialisation">Specialisation</Label>
-                <select
-                  id="specialisation"
+                <Select
+                  onValueChange={value =>
+                    handleSelectChange("specialisation", value)
+                  }
                   value={formData.specialisation}
-                  onChange={handleInputChange}
-                  className="appearance-none border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent pl-3 pr-8 py-1 text-base shadow-xs mt-1"
                 >
-                  <option>Select your specialisation</option>
-                  <option>Ayurveda</option>
-                  <option>Yoga & Naturopathy</option>
-                  <option>Unani</option>
-                  <option>Siddha</option>
-                  <option>Homoeopathy</option>
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 top-6 flex items-center px-2 text-gray-700">
-                  <ChevronDownIcon />
-                </div>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select your specialisation" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Ayurveda">Ayurveda</SelectItem>
+                    <SelectItem value="Yoga & Naturopathy">
+                      Yoga & Naturopathy
+                    </SelectItem>
+                    <SelectItem value="Unani">Unani</SelectItem>
+                    <SelectItem value="Siddha">Siddha</SelectItem>
+                    <SelectItem value="Homoeopathy">Homoeopathy</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div>
                 <Label htmlFor="registrationNo">Registration Number</Label>
@@ -550,7 +500,8 @@ const PractitionerRegistration = () => {
                     Upload Degree Certificate
                   </Label>
                   <div className="mt-1 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-                    <UploadIcon />
+                    {/* FIX: Changed UploadIcon to Upload */}
+                    <Upload className="mx-auto h-8 w-8 text-gray-400 mb-2" />
                     <p className="text-sm text-gray-600">
                       PDF files only. Multiple documents allowed.
                     </p>
@@ -582,7 +533,8 @@ const PractitionerRegistration = () => {
                     Please upload Professional mug-shot photograph Only
                   </p>
                   <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-                    <UploadIcon />
+                    {/* FIX: Changed UploadIcon to Upload */}
+                    <Upload className="mx-auto h-8 w-8 text-gray-400 mb-2" />
                     <p className="text-sm text-gray-600">
                       Image files only (JPG, PNG)
                     </p>
@@ -614,24 +566,27 @@ const PractitionerRegistration = () => {
                   />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="relative">
+                  <div>
                     <Label htmlFor="state">Select State</Label>
-                    <select
-                      id="state"
+                    <Select
+                      onValueChange={value =>
+                        handleSelectChange("state", value)
+                      }
                       value={formData.state}
-                      onChange={handleInputChange}
-                      className="appearance-none border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent pl-3 pr-8 py-1 text-base shadow-xs mt-1"
                     >
-                      <option>Select your state</option>
-                      <option>Andhra Pradesh</option>
-                      <option>Karnataka</option>
-                      <option>Kerala</option>
-                      <option>Tamil Nadu</option>
-                      <option>Telangana</option>
-                    </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 top-6 flex items-center px-2 text-gray-700">
-                      <ChevronDownIcon />
-                    </div>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select your state" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Andhra Pradesh">
+                          Andhra Pradesh
+                        </SelectItem>
+                        <SelectItem value="Karnataka">Karnataka</SelectItem>
+                        <SelectItem value="Kerala">Kerala</SelectItem>
+                        <SelectItem value="Tamil Nadu">Tamil Nadu</SelectItem>
+                        <SelectItem value="Telangana">Telangana</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div>
                     <Label htmlFor="pinCode">PIN Code</Label>
@@ -647,12 +602,10 @@ const PractitionerRegistration = () => {
                 </div>
                 <div>
                   <div className="flex items-center space-x-2 mb-2">
-                    <input
-                      type="checkbox"
+                    <Checkbox
                       id="sameAsCurrent"
-                      className="size-4 rounded-[4px] border"
                       checked={formData.sameAsCurrent}
-                      onChange={handleInputChange}
+                      onCheckedChange={handleCheckedChange}
                     />
                     <Label htmlFor="sameAsCurrent">
                       Same as current address
@@ -674,6 +627,7 @@ const PractitionerRegistration = () => {
             <Button
               disabled={!isEmailVerified}
               className="w-full py-3 text-base"
+              onClick={handleCompleteRegistration}
             >
               Complete Registration
             </Button>
