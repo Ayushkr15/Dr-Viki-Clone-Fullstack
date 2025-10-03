@@ -132,18 +132,7 @@ export const PersonalInformation = ({
             onChange={handleChange}
           />
         </div>
-        <div className="space-y-2 md:col-span-2">
-          <Label htmlFor="password">
-            Create Password <span className="text-destructive">*</span>
-          </Label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="Minimum 8 characters"
-            value={data.password}
-            onChange={handleChange}
-          />
-        </div>
+        
         <div className="space-y-2 md:col-span-2">
           <Label htmlFor="address">Address</Label>
           <Textarea

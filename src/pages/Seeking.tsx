@@ -28,7 +28,6 @@ const Seeking = () => {
     educationLevel: "",
     phoneNumber: "",
     email: "",
-    password: "",
     address: "",
     smokingStatus: "",
     alcoholConsumption: "",
@@ -94,16 +93,14 @@ const Seeking = () => {
     }
   };
 
-
   const handleSubmit = async () => {
     const registrationData = new FormData();
 
     // User Account Data
     registrationData.append("username", patientData.email);
     registrationData.append("email", patientData.email);
-    registrationData.append("password", patientData.password);
+    
 
-    // FIX: Manually map frontend camelCase state to backend snake_case fields
     registrationData.append("full_name", patientData.fullName);
     registrationData.append("date_of_birth", patientData.dob);
     registrationData.append("gender", patientData.gender);
@@ -112,9 +109,7 @@ const Seeking = () => {
     registrationData.append("phone_number", patientData.phoneNumber);
     registrationData.append("address", patientData.address);
     registrationData.append("smoking_status", patientData.smokingStatus);
-    // ... continue this pattern for ALL other text/select fields ...
 
-    // You don't need to change the file handling
     if (patientData.tongueImage) {
       registrationData.append("tongue_image", patientData.tongueImage);
     }

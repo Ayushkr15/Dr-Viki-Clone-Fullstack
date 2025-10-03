@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ArrowLeft, ChevronDown, Upload } from "lucide-react"; // Correct icons are imported here
+import { ArrowLeft, ChevronDown, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -21,24 +21,17 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 
 const PractitionerRegistration = () => {
-  // All state and handlers are correctly placed INSIDE the component.
 
-  // --- State for OTP Flow ---
   const [mobileNumber, setMobileNumber] = useState("");
   const [mobileOtp, setMobileOtp] = useState("");
   const [isMobileOtpSent, setIsMobileOtpSent] = useState(false);
   const [isMobileVerified, setIsMobileVerified] = useState(false);
   const [mobileError, setMobileError] = useState("");
-
   const [email, setEmail] = useState("");
   const [emailOtp, setEmailOtp] = useState("");
   const [isEmailOtpSent, setIsEmailOtpSent] = useState(false);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [emailError, setEmailError] = useState("");
-
-  const [password, setPassword] = useState("");
-
-  // --- State for the rest of the form ---
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -53,8 +46,6 @@ const PractitionerRegistration = () => {
     permanentAddress: "",
     sameAsCurrent: false,
   });
-
-  // --- Handler Functions ---
 
   const handleSendOtp = async (contact: string, type: "sms" | "email") => {
     if (type === "sms") setMobileError("");
@@ -131,18 +122,12 @@ const PractitionerRegistration = () => {
       alert("Please verify both your mobile and email before proceeding.");
       return;
     }
-    if (password.length < 8) {
-      alert("Password must be at least 8 characters long.");
-      return;
-    }
-
     const registrationData = new FormData();
 
     // User Account Data
     registrationData.append("username", email);
     registrationData.append("email", email);
-    registrationData.append("password", password);
-
+  
     // Profile Data
     registrationData.append("first_name", formData.firstName);
     registrationData.append("last_name", formData.lastName);
@@ -440,16 +425,7 @@ const PractitionerRegistration = () => {
                   />
                 </div>
               </div>
-              <div>
-                <Label htmlFor="password">Create Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Minimum 8 characters"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                />
-              </div>
+              
               <div>
                 <Label htmlFor="specialisation">Specialisation</Label>
                 <Select
@@ -500,7 +476,7 @@ const PractitionerRegistration = () => {
                     Upload Degree Certificate
                   </Label>
                   <div className="mt-1 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-                    {/* FIX: Changed UploadIcon to Upload */}
+                    
                     <Upload className="mx-auto h-8 w-8 text-gray-400 mb-2" />
                     <p className="text-sm text-gray-600">
                       PDF files only. Multiple documents allowed.
@@ -533,7 +509,6 @@ const PractitionerRegistration = () => {
                     Please upload Professional mug-shot photograph Only
                   </p>
                   <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-                    {/* FIX: Changed UploadIcon to Upload */}
                     <Upload className="mx-auto h-8 w-8 text-gray-400 mb-2" />
                     <p className="text-sm text-gray-600">
                       Image files only (JPG, PNG)

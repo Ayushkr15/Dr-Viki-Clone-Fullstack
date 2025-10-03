@@ -27,7 +27,6 @@ def send_sms_otp(phone_number, otp):
             print(f"Error sending SMS: {e}")
             return False
 
-    # If in debug mode, just print a message and pretend it was successful.
     print(f"DEBUG MODE: Skipping SMS to {phone_number}. OTP is {otp}")
     return True
 
@@ -37,10 +36,7 @@ def send_email_otp(email, otp):
     try:
         subject = 'Your AYUSH Care Verification Code'
         message = f'Your verification code is: {otp}'
-
-        # FIX: Use the verified email from settings instead of a hardcoded one
         from_email = settings.DEFAULT_FROM_EMAIL
-
         recipient_list = [email]
         send_mail(subject, message, from_email, recipient_list)
         print(f"Email sent to {email} from {from_email}")
